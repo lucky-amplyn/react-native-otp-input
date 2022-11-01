@@ -184,7 +184,7 @@ export default class OTPInputView extends Component<InputProps, OTPInputViewStat
     renderOneInputField = (_: TextInput, index: number) => {
         const { codeInputFieldStyle, codeInputHighlightStyle, secureTextEntry, editable, keyboardType, selectionColor, keyboardAppearance } = this.props
         const { defaultTextFieldStyle } = styles
-        const { selectedIndex, digits } = this.state
+        const { selectedIndex, digits,focusedIndex } = this.state
         const { clearInputs, placeholderCharacter, placeholderTextColor } = this.props
         const { color: defaultPlaceholderTextColor } = { ...defaultTextFieldStyle, ...codeInputFieldStyle }
         return (
@@ -197,6 +197,8 @@ export default class OTPInputView extends Component<InputProps, OTPInputViewStat
                     onChangeText={text => {
                         this.handleChangeText(index, text)
                     }}
+                    onFocus={() => this.setState({ focusedIndex:index })}
+                    onBlur={() => this.setState({ focusedIndex:null })}
                     onKeyPress={({ nativeEvent: { key } }) => { this.handleKeyPressTextInput(index, key) }}
                     value={ !clearInputs ? digits[index]: "" }
                     keyboardAppearance={keyboardAppearance}
@@ -206,7 +208,7 @@ export default class OTPInputView extends Component<InputProps, OTPInputViewStat
                     selectionColor={selectionColor}
                     secureTextEntry={secureTextEntry}
                     editable={editable}
-                    placeholder={placeholderCharacter}
+                    placeholder={focusedIndex == index ? '' : placeholderCharacter}
                     placeholderTextColor={placeholderTextColor || defaultPlaceholderTextColor}
                 />
             </View>
